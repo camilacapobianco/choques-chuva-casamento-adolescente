@@ -1,0 +1,16 @@
+# Arquivos do R
+.Rhistory
+.RData
+.Rproj.user/
+
+# Downloads do CHIRPS (pesados; o 01_construcao_base.R baixa de novo)
+chirps/
+*.tif
+*.nc
+dados/intermediarios/precip_municipio_mes.*
+
+# Arquivos temporários do Office e do sistema
+~$*
+.DS_Store
+Thumbs.db
+desktop.ini
