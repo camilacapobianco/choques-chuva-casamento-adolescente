@@ -52,12 +52,12 @@ O `02_analise.R` usa quatro arquivos:
 | `dados/intermediarios/base_agro.rds` | Base municipal com todas as variáveis (casamentos, choques, agropecuária, controles) | no repositório |
 | `dados/intermediarios/geo_municipios.rds` | Microrregião de cada município, usada no erro agrupado; juntada à base no início do script | no repositório |
 | `dados/intermediarios/pib_agro_2016.rds` | Participação agropecuária de 2016, usada no teste de H5 | no repositório |
-| `dados/intermediarios/malha_2016/` | Malha municipal, usada só no mapa da Figura 1 | baixar do IBGE (seção abaixo) |
+| `dados/intermediarios/malha_2016/` | Malha municipal, usada só no mapa da Figura 1 | baixar do IBGE (seção abaixo); opcional |
 
 Passo a passo:
 
 1. Baixe o repositório (botão verde **Code → Download ZIP**) e descompacte.
-2. Baixe a malha municipal e coloque-a em `dados/intermediarios/malha_2016/` (seção "Malha municipal", abaixo).
+2. (Opcional) Baixe a malha municipal e coloque-a em `dados/intermediarios/malha_2016/` (seção "Malha municipal", abaixo). Sem a malha, o script roda normalmente e só não gera o mapa da Figura 1; uma mensagem no console avisa isso.
 3. Abra o `00_rodar_tudo.R` e troque o caminho em `pasta` pela pasta do repositório no seu computador. A linha do `01_construcao_base.R` já vem comentada, então só a análise roda.
 4. Rode o arquivo inteiro. Os resultados aparecem no console, e as tabelas (.docx) e figuras (.png) são salvas na pasta do repositório.
 
@@ -65,7 +65,7 @@ Também dá para abrir o `02_analise.R` direto: troque o caminho na linha `if (!
 
 ### Malha municipal (não incluída no repositório)
 
-O shapefile da malha municipal de 2016 tem mais de 100 MB, acima do limite do GitHub. Para rodar só a análise:
+O shapefile da malha municipal de 2016 tem mais de 100 MB, acima do limite do GitHub. Ela só é necessária para gerar o mapa da Figura 1. Para gerá-lo:
 
 1. Baixe o arquivo do IBGE: https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_municipais/municipio_2016/Brasil/BR/br_municipios.zip
 2. Descompacte o conteúdo em `dados/intermediarios/malha_2016/`, de modo que o arquivo `BRMUE250GC_SIR.shp` (e os `.dbf`, `.shx`, `.prj` e `.cpg`) fique diretamente nessa pasta.
