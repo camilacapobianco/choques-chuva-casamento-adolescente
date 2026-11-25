@@ -41,7 +41,27 @@ O script mestre roda os dois scripts na ordem:
 | 1 | `01_construcao_base.R` | Baixa e processa as fontes e monta a base municipal | longo (download do CHIRPS de 1981–2016) |
 | 2 | `02_analise.R` | Define a amostra, estima os modelos e gera as tabelas e as figuras | poucos minutos |
 
-**Atalho (recomendado):** os arquivos `.rds` de `dados/intermediarios/` já vão junto, então dá para rodar só o `02_analise.R`, em poucos minutos, sem refazer o download do CHIRPS. Antes, baixe a malha municipal (próxima seção), usada apenas no mapa da Figura 1. O `01_construcao_base.R` só precisa ser rodado para reconstruir a base desde as fontes originais.
+### Rodar só a análise (recomendado)
+
+Não é preciso rodar o `01_construcao_base.R`, que baixa o CHIRPS de 1981–2016 e demora bastante. A base pronta já vai junto, e o `02_analise.R` parte dela.
+
+O `02_analise.R` usa quatro arquivos:
+
+| Arquivo | Para que serve | Onde está |
+|---|---|---|
+| `dados/intermediarios/base_agro.rds` | Base municipal com todas as variáveis (casamentos, choques, agropecuária, controles) | no repositório |
+| `dados/intermediarios/geo_municipios.rds` | Microrregião de cada município, usada no erro agrupado; juntada à base no início do script | no repositório |
+| `dados/intermediarios/pib_agro_2016.rds` | Participação agropecuária de 2016, usada no teste de H5 | no repositório |
+| `dados/intermediarios/malha_2016/` | Malha municipal, usada só no mapa da Figura 1 | baixar do IBGE (seção abaixo) |
+
+Passo a passo:
+
+1. Baixe o repositório (botão verde **Code → Download ZIP**) e descompacte.
+2. Baixe a malha municipal e coloque-a em `dados/intermediarios/malha_2016/` (seção "Malha municipal", abaixo).
+3. Abra o `00_rodar_tudo.R` e troque o caminho em `pasta` pela pasta do repositório no seu computador. A linha do `01_construcao_base.R` já vem comentada, então só a análise roda.
+4. Rode o arquivo inteiro. Os resultados aparecem no console, e as tabelas (.docx) e figuras (.png) são salvas na pasta do repositório.
+
+Também dá para abrir o `02_analise.R` direto: troque o caminho na linha `if (!exists("pasta")) pasta <- ...`, no início do script, e rode.
 
 ### Malha municipal (não incluída no repositório)
 
