@@ -74,41 +74,48 @@ print(desc, digits = 3)
 #5. Figura 1: mapa SPI (amostra principal) e regiões, medianas por região e figura 2: histogramas da renda
 # Mapa do SPI-12 (amostra principal)
 #malha que usamos pra montar a base
-malha <- st_read(file.path(dir_inter, "malha_2016", "BRMUE250GC_SIR.shp")) |>
-  filter(!as.character(CD_GEOCMU) %in% c("4300001", "4300002"))   # lagoas do RS, não são municípios
-stopifnot(nrow(malha) == 5570)   # confere que sobraram só os municípios
 
-#junta com a amostra e ajusta o código numérico
-mapa_spi <- malha |>
-  mutate(CD_GEOCMU = as.numeric(CD_GEOCMU)) |>
-  left_join(d |> select(code_muni, spi_safra),
-            by = c("CD_GEOCMU" = "code_muni"))
-#fazer o mapa
-ggplot(mapa_spi) +
-  geom_sf(aes(fill = spi_safra), color = NA) +
-  scale_fill_steps2(
-    low = rgb(0.45, 0.16, 0.32), mid = "grey92", high = "#F5CC59",
-    midpoint = 0,
-    breaks = c(-2, -1.5, -1, 1, 1.5, 2),   # o intervalo normal (−1 a +1) fica com uma cor só
-    limits = c(-3, 3), oob = scales::squish,
-    labels = c("−2", "−1,5", "−1", "+1", "+1,5", "+2"),
-    na.value = "grey60",
-    name = "SPI-12 (ano-safra)"
-  ) +
-  guides(fill = guide_coloursteps(barwidth = unit(8, "cm"), barheight = unit(0.4, "cm"))) +
-  labs(caption = paste0(
-    "Seca: SPI ≤ −1 (tons de roxo). Excesso: SPI ≥ +1 (tons de amarelo).\n",
-    "Cinza claro: chuva normal. Cinza médio: fora da amostra principal.")) +
-  coord_sf(expand = FALSE) +
-  theme_void() +
-  theme(
-    legend.position = "bottom",
-    legend.title    = element_text(size = 10),
-    plot.caption    = element_text(size = 9, hjust = 0.5)
-  )
+arq_malha <- file.path(dir_inter,"malha_2016","BRMUE250GC_SIR.shp")
 
-ggsave(file.path(pasta, "fig1_mapa_spi12.png"), width = 6.5, height = 6.5, dpi = 300)
-
+  
+if (file.exists(arq_malha)) {
+  malha <- st_read(arq_malha) |> filter(!as.character(CD_GEOCMU) %in% c("4300001", "4300002"))   # lagoas do RS, não são municípios
+  stopifnot(nrow(malha) == 5570)   # confere que sobraram só os municípios
+  
+  #junta com a amostra e ajusta o código numérico
+  mapa_spi <- malha |>
+    mutate(CD_GEOCMU = as.numeric(CD_GEOCMU)) |>
+    left_join(d |> select(code_muni, spi_safra),
+              by = c("CD_GEOCMU" = "code_muni"))
+  #fazer o mapa
+  p <- ggplot(mapa_spi) +
+    geom_sf(aes(fill = spi_safra), color = NA) +
+    scale_fill_steps2(
+      low = rgb(0.45, 0.16, 0.32), mid = "grey92", high = "#F5CC59",
+      midpoint = 0,
+      breaks = c(-2, -1.5, -1, 1, 1.5, 2),   # o intervalo normal (−1 a +1) fica com uma cor só
+      limits = c(-3, 3), oob = scales::squish,
+      labels = c("−2", "−1,5", "−1", "+1", "+1,5", "+2"),
+      na.value = "grey60",
+      name = "SPI-12 (ano-safra)"
+    ) +
+    guides(fill = guide_coloursteps(barwidth = unit(8, "cm"), barheight = unit(0.4, "cm"))) +
+    labs(caption = paste0(
+      "Seca: SPI ≤ −1 (tons de roxo). Excesso: SPI ≥ +1 (tons de amarelo).\n",
+      "Cinza claro: chuva normal. Cinza médio: fora da amostra principal.")) +
+    coord_sf(expand = FALSE) +
+    theme_void() +
+    theme(
+      legend.position = "bottom",
+      legend.title    = element_text(size = 10),
+      plot.caption    = element_text(size = 9, hjust = 0.5)
+    )
+  
+  ggsave(file.path(pasta, "fig1_mapa_spi12.png"), plot = p, width = 6.5, height = 6.5, dpi = 300)
+  
+} else {
+  message("Malha não encontrada: a figura não foi gerada.")
+}
 
 mapa_regiao <- c(
   AC = "Norte", AP = "Norte", AM = "Norte", PA = "Norte", RO = "Norte", RR = "Norte", TO = "Norte",
