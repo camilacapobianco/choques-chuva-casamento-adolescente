@@ -10,7 +10,7 @@ O trabalho estima, por MQO, a relação entre choques de chuva no ano-safra de j
 
 ## Como reproduzir
 
-1. Instale o R (versão usada: [preencher, ex.: 4.4.1]) e os pacotes listados abaixo.
+1. Instale o R (versão usada: R 4.6.0, de 24/04/2026) e os pacotes listados abaixo.
 2. Abra `00_rodar_tudo.R`, troque o caminho em `pasta` pelo caminho desta pasta no seu computador e rode o arquivo inteiro.
 
 Estrutura da pasta:
@@ -31,7 +31,7 @@ trabalho de econo/
         ├── base_agro.rds
         ├── geo_municipios.rds
         ├── pib_agro_2016.rds
-        └── malha_2016/    # shapefile da malha municipal 2016 (IBGE)
+        └── malha_2016/    # NÃO incluída (arquivo > 100 MB); ver "Malha municipal" abaixo
 ```
 
 O script mestre roda os dois scripts na ordem:
@@ -41,7 +41,16 @@ O script mestre roda os dois scripts na ordem:
 | 1 | `01_construcao_base.R` | Baixa e processa as fontes e monta a base municipal | longo (download do CHIRPS de 1981–2016) |
 | 2 | `02_analise.R` | Define a amostra, estima os modelos e gera as tabelas e as figuras | poucos minutos |
 
-**Atalho (recomendado):** os arquivos de `dados/intermediarios/` já vão junto, então dá para rodar só o `02_analise.R`, em poucos minutos, sem refazer o download do CHIRPS. O `01_construcao_base.R` só precisa ser rodado para reconstruir a base desde as fontes originais.
+**Atalho (recomendado):** os arquivos `.rds` de `dados/intermediarios/` já vão junto, então dá para rodar só o `02_analise.R`, em poucos minutos, sem refazer o download do CHIRPS. Antes, baixe a malha municipal (próxima seção), usada apenas no mapa da Figura 1. O `01_construcao_base.R` só precisa ser rodado para reconstruir a base desde as fontes originais.
+
+### Malha municipal (não incluída no repositório)
+
+O shapefile da malha municipal de 2016 tem mais de 100 MB, acima do limite do GitHub. Para rodar só a análise:
+
+1. Baixe o arquivo do IBGE: https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_municipais/municipio_2016/Brasil/BR/br_municipios.zip
+2. Descompacte o conteúdo em `dados/intermediarios/malha_2016/`, de modo que o arquivo `BRMUE250GC_SIR.shp` (e os `.dbf`, `.shx`, `.prj` e `.cpg`) fique diretamente nessa pasta.
+
+Ao rodar o `01_construcao_base.R`, esse download e a descompactação são feitos automaticamente (bloco 01).
 
 ---
 
@@ -55,15 +64,15 @@ O script mestre roda os dois scripts na ordem:
 | Malha municipal 2016 do IBGE (geoftp) | Polígonos dos municípios (`BRMUE250GC_SIR.shp`) | `01_construcao_base.R`, bloco 01 |
 | API de Localidades do IBGE | Microrregião de cada município, usada no agrupamento dos erros-padrão | `01_construcao_base.R`, bloco 08 |
 
-Observação: a API de Localidades devolve a divisão vigente na data da consulta. Os códigos usados no trabalho foram baixados em [preencher a data].
+Observação: a API de Localidades devolve a divisão vigente na data da consulta. Os códigos usados no trabalho foram baixados em novembro de 2026.
 
 ### Dados baixados à mão (em `dados/brutos/`)
 
-Os arquivos já vão junto com o código. A tabela registra a origem de cada um, consultada em [preencher as datas].
+Os arquivos já vão junto com o código. A tabela registra a origem de cada um, consultada em novembro de 2026.
 
 | Arquivo | Fonte | Filtros da consulta |
 |---|---|---|
-| `casamentos.csv` | SIDRA/IBGE, Tabela 4412 (Estatísticas do Registro Civil) | Ano 2016; nível territorial: Município; casamentos entre cônjuges masculino e feminino; idade do 1º cônjuge: Total; idade do 2º cônjuge: idades simples (é preciso ter "Menos de 15 anos", "15 anos", "16 anos" e "17 anos" separadas); com as colunas de casamentos ocorridos no ano e em anos anteriores. [conferir os filtros exatos usados] |
+| `casamentos.csv` | SIDRA/IBGE, Tabela 4412 (Estatísticas do Registro Civil) | Ano 2016; nível territorial: Município; casamentos entre cônjuges masculino e feminino; idade do 1º cônjuge: Total; idade do 2º cônjuge: idades simples (é preciso ter "Menos de 15 anos", "15 anos", "16 anos" e "17 anos" separadas); com as colunas de casamentos ocorridos no ano e em anos anteriores. |
 | `pib.csv` | SIDRA/IBGE, Tabela 5938 (PIB dos Municípios) | Ano 2016; nível: Município; variáveis: VAB a preços correntes total e VAB a preços correntes da agropecuária |
 | `tabela5938.csv` | SIDRA/IBGE, Tabela 5938 | Mesmas variáveis de `pib.csv`, para os anos de 2002 a 2018 |
 | `atlas.xlsx` | Atlas do Desenvolvimento Humano no Brasil (PNUD; Ipea; FJP, 2013), atlasbrasil.org.br | Consulta por município, ano 2010, com 7 colunas nesta ordem: Territorialidades; População total; População urbana; Taxa de analfabetismo (15 anos ou mais); Renda per capita; % de extremamente pobres; % de pobres |
